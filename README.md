@@ -1,4 +1,4 @@
-# Group-Grep
+# Group-Grep (gg)
 
 ## Table of Contents
 
