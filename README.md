@@ -7,7 +7,7 @@
 
 ## What does it do? / Usage example
 
-``gg '(\d\.\d+){16,}' ./src/*``
+``ggrep '(\d\.\d+){16,}' ./src/*``
 
 1. Performs ``grep`` with given regular expression (in the above example: 
    float number that is at least 16 characters long) recursively on given path 
