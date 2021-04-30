@@ -1,4 +1,4 @@
-# Grouped Grep
+# Group-Grep
 
 ## Table of Contents
 
@@ -7,33 +7,29 @@
 
 ## What does it do? / Usage example
 
-``gg '"[A-Za-z]{8,}"' ./src/*``
+``gg '(\d\.\d+){16,}' ./src/*``
 
-1. Performs ``grep`` with given regular expression recursively on given path of 
-   directory or file.
-2. Outputs amount of: total matches, scanned files, files containing matches.
+1. Performs ``grep`` with given regular expression (in the above example: 
+   float number that is at least 16 characters long) recursively on given path 
+   of directory or file.
+2. Outputs amounts of: total matches, files containing matches, files scanned.
 3. Outputs a descending "hit list": all matching strings and their amount of 
    total occurrences. 
 
 **Output e.g.:**
 
 ```
-Found 978 matches in 83 out of 90 files.
-There are 207 different matching strings:
+Found 177 matches in 83 out of 90 files.
+There are 2 different matching strings:
 
-................................................................................
-................................................................................
-...............................................
+..
 
-"vanilla"  - 91 occurrences.
-"before"   - 86 occurrences.
-"after"    - 56 occurrences.
-"hello"    - 41 occurrences.
-"MESSAGE"  - 36 occurrences.
-"Cancel"   - 32 occurrences.
+3.14159265358979 - 91 occurrences.
+2.71828182845904 - 86 occurrences.
 ...
-```
 
+
+``gg '"[A-Za-z_]{10,}"' ./src/*``
 
 
 ## Author and License
