@@ -26,7 +26,7 @@ There are 2 different matching strings:
 
 3.14159265358979 - 91 occurrences.
 2.71828182845904 - 86 occurrences.
-...
+```
 
 
 ``gg '"[A-Za-z_]{10,}"' ./src/*``
