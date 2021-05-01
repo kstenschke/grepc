@@ -47,18 +47,28 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
                   uint32_t amount_strings);
 
 int main(int argc, char **argv) {
-  std::string reg_ex;
+  std::string pattern;
   std::string path;
   bool verbose = false;
   bool print_version = false;
-  ParseArguments(argc, argv, &reg_ex, &path, &verbose, &print_version);
+  ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
 
   if (print_version) {
     PrintVersion();
     exit(0);
   }
 
-  std::string command = "grep -Eo '" + reg_ex + "' " + path + " -r";
+  if (pattern.empty()) {
+    std::cerr << "No pattern given.\n";
+    exit(0);
+  }
+
+  if (path.empty()) {
+    path = argv[0];
+    path = path.substr(0, path.length() - 5) + "*";
+  }
+
+  std::string command = "grep -Eo '" + pattern + "' " + path + " -r";
 
   auto strings_in_files = GetCliCommandOutput(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
@@ -160,7 +170,7 @@ void PrintVersion() {
   "This is free software: you are free to change and redistribute it.\n"
   "There is NO WARRANTY, to the extent permitted by law.\n"
   "\n"
-  "Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.";
+  "Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.\n";
 }
 
 void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,

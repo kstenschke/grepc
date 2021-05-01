@@ -101,8 +101,7 @@ There are 2 different matching strings:
 
 ## Install
 
-Build from source, than:  
-``sudo make install``
+Build from source, than: ``sudo make install``
 
 
 ## Conventions
