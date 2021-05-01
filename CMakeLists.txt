@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 project(grepc)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -12,3 +12,7 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(grepc grepc/main.cc)
+
+install(TARGETS
+        ${PROJECT_NAME}
+        RUNTIME DESTINATION /usr/bin/)

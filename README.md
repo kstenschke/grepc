@@ -32,6 +32,7 @@ occurrences.
   * [Find floating numbers sorted by popularity](#find-floating-numbers-and-their-popularity)
   * [Find floating numbers sorted by popularity](#find-floating-numbers-and-their-popularity)
 * [Build from source](#build-from-source)
+* [Install](#install)
 * [Conventions](#conventions)
 * [Used third party applications](#used-third-party-applications)
 * [Author and License](#author-and-license)
@@ -96,6 +97,12 @@ There are 2 different matching strings:
 ## Build from source
 
 ``cmake CMakeLists.txt; make``
+
+
+## Install
+
+Build from source, than:  
+``sudo make install``
 
 
 ## Conventions
