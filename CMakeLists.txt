@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(popgrep)
+project(grepc)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -12,4 +12,4 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_executable(popgrep popgrep/main.cpp)
+add_executable(grepc grepc/main.cpp)
