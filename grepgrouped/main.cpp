@@ -53,10 +53,13 @@ int main() {
     }
   }
 
+  const std::string &amount_files_in_path = GetAmountFilesInPath(path);
+
   std::cout << "\nFound " + std::to_string(lines_of_strings_in_files.size())
-      + " matches in "
-      << std::to_string(amount_files) << " out of " << GetAmountFilesInPath(path)
-      << " files.\n";
+      + " matches in " << std::to_string(amount_files)
+      << (amount_files_in_path == "1"
+          ? "file"
+          : " out of " + amount_files_in_path + " files.\n");
 
   std::cout << "There are " + std::to_string(amount_strings)
       + " different matching strings:\n" << std::endl;

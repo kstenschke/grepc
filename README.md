@@ -5,7 +5,7 @@
 ...
 
 
-## What does it do? / Usage example
+## Usage example / What does it do? 
 
 ``ggrep '(\d\.\d+){16,}' ./src/*``
 
