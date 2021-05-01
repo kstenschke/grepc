@@ -4,6 +4,15 @@
 #include <tuple>
 #include <algorithm>
 
+void ParseArguments(int argc,
+                    char *const *argv,
+                    std::string &reg_ex,
+                    std::string &path,
+                    bool &verbose,
+                    bool &print_version);
+
+void PrintVersion();
+
 uint16_t NumPlaces(uint32_t n);
 
 std::string GetAmountFilesInPath(const std::string& path);
@@ -24,10 +33,17 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
                   const std::string &amount_files_in_path,
                   uint32_t amount_strings);
 
-int main() {
-  std::string reg_ex = "\"[A-Za-z]{7,}\"";
-  std::string path = "/home/kay/CLionProjects/shellDo/*";
-  bool verbose = true;
+int main(int argc, char **argv) {
+  std::string reg_ex;
+  std::string path;
+  bool verbose = false;
+  bool print_version = false;
+  ParseArguments(argc, argv, reg_ex, path, verbose, print_version);
+
+  if (print_version) {
+    PrintVersion();
+    exit(0);
+  }
 
   std::string command = "grep -Eo '" + reg_ex + "' " + path + " -r";
 
@@ -95,6 +111,45 @@ int main() {
   }
 
   return 0;
+}
+
+void ParseArguments(int argc,
+                    char *const *argv,
+                    std::string &reg_ex,
+                    std::string &path,
+                    bool &verbose,
+                    bool &print_version) {
+  bool reg_ex_set = false;
+
+  for (uint8_t i = 1; i < argc; ++i) {
+    if (argv[i] == "-v" || argv[i] == "--verbose") {
+      verbose = true;
+      continue;
+    }
+
+    if (argv[i] == "-V" || argv[i] == "--version") {
+      print_version = true;
+      break;
+    }
+
+    if (!reg_ex_set) {
+      reg_ex = argv[i];
+      reg_ex_set = true;
+    } else {
+      path = argv[i];
+    }
+  }
+}
+
+void PrintVersion() {
+  std::cout <<
+  "grepc 0.0.1\n"
+  "License GPLv3+: GNU GPL version 3 or later "
+  "<http://gnu.org/licenses/gpl.html>.\n"
+  "This is free software: you are free to change and redistribute it.\n"
+  "There is NO WARRANTY, to the extent permitted by law.\n"
+  "\n"
+  "Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.";
 }
 
 void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
