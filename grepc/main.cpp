@@ -1,3 +1,14 @@
+/* grepc
+ *
+ * License GPLv3+: GNU GPL version 3 or later
+ * <http://gnu.org/licenses/gpl.html>.
+ *
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
+ *
+ * Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.
+ */
+
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -230,7 +241,6 @@ std::string RepeatSpaces(uint8_t amount) {
 }
 
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
-              const std::tuple<uint32_t, std::string>& b)
-{
+              const std::tuple<uint32_t, std::string>& b) {
   return (std::get<0>(a) > std::get<0>(b));
 }
