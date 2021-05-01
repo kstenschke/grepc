@@ -108,10 +108,10 @@ See [CHANGELOG.md](CHANGELOG.md)
 
 ## Used third party applications
 
-| Application                                                                                    | License                                                                      |
-| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [GNU Grep](https://www.gnu.org/software/grep/)                                                 | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
-| [wc](https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html#wc-invocation) | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
+| Application                                                                                        | License                                                                      |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [GNU Grep](https://www.gnu.org/software/grep/)                                                     | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
+| [GNU wc](https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html#wc-invocation) | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
 
 
 ## Author and License
