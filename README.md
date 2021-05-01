@@ -1,4 +1,4 @@
-# grep Chart
+# Grep Chart
 
 ## Synopsis
 
