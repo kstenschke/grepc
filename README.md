@@ -64,13 +64,13 @@ characters:
 **Output e.g.:**
 
 ```
-"White Christmas"  - 156 occurrences.
-"Candle in the Wind"   - 155 occurrences.
-"In the Summertime"  - 154 occurrences.
-"I will always love you"  - 153 occurrences.
-"Rock around the Clock"  - 152 occurrences.
-"Its now or never"  - 151 occurrences.
-"We are the world"  - 150 occurrences.
+156 "White Christmas"
+155 "Candle in the Wind"
+154 "In the Summertime"
+153 "I will always love you"
+152 "Rock around the Clock"
+151 "Its now or never"
+150 "We are the world"
 ```
 
 
@@ -86,8 +86,8 @@ Find floating numbers that have at least 14 decimal places.
 Found 177 matches in 83 out of 90 files.
 There are 2 different matching strings:
 
-3.14159265358979 - 91 occurrences.
-2.71828182845904 - 86 occurrences.
+91 3.14159265358979
+86 2.71828182845904
 ```
 
 
