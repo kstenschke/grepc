@@ -51,7 +51,8 @@ int main(int argc, char **argv) {
   std::string path;
   bool verbose = false;
   bool print_version = false;
-  ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
+
+  if (argc > 1) ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
 
   if (print_version) {
     PrintVersion();
@@ -141,6 +142,16 @@ void ParseArguments(int argc,
                     bool *verbose,
                     bool *print_version) {
   bool reg_ex_set = false;
+
+  if (argv[1][0] == '-') {
+    if (strcmp(argv[1], "-v") != 0
+        && strcmp(argv[0], "--verbose") != 0
+        && strcmp(argv[0], "-V") != 0
+        && strcmp(argv[0], "--version") != 0) {
+      std::cerr << "Unknown option: " << argv[0] << "\n";
+      exit(1);
+    }
+  }
 
   for (uint64_t i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
