@@ -52,7 +52,8 @@ int main(int argc, char **argv) {
   bool verbose = false;
   bool print_version = false;
 
-  if (argc > 1) ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
+  if (argc > 1)
+    ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
 
   if (print_version) {
     PrintVersion();
