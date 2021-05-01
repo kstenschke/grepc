@@ -10,12 +10,12 @@
  * Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.
  */
 
-#include <string.h>
+#include <algorithm>
+#include <cstring>
 #include <iostream>
-#include <vector>
 #include <sstream>
 #include <tuple>
-#include <algorithm>
+#include <vector>
 
 void ParseArguments(int argc,
                     char *const *argv,
@@ -26,7 +26,7 @@ void ParseArguments(int argc,
 
 void PrintVersion();
 
-uint16_t NumPlaces(uint32_t n);
+uint32_t NumPlaces(uint32_t n);
 
 std::string GetAmountFilesInPath(const std::string& path);
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
   uint32_t amount_strings = 0;
   std::string found_strings;
-  uint8_t max_occurrences = 0;
+  uint32_t max_occurrences = 0;
 
   for (auto const &line : lines_of_strings_in_files) {
     auto offset_colon = line.find(':');
@@ -113,8 +113,8 @@ int main(int argc, char **argv) {
 
   for (std::tuple<uint32_t, std::string> const &tuple_amount_string :
       amount_per_string) {
-    auto str = std::get<1>(tuple_amount_string);
-    auto amount = std::get<0>(tuple_amount_string);
+    const auto& str = std::get<1>(tuple_amount_string);
+    uint32_t amount = std::get<0>(tuple_amount_string);
 
     std::cout << amount
       << RepeatSpaces(max_places - NumPlaces(amount))
@@ -132,7 +132,7 @@ void ParseArguments(int argc,
                     bool *print_version) {
   bool reg_ex_set = false;
 
-  for (uint8_t i = 1; i < argc; ++i) {
+  for (uint64_t i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
       *verbose = true;
       continue;
@@ -177,10 +177,10 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
       + " different matching strings:\n" << std::endl;
 }
 
-uint16_t NumPlaces(uint32_t n) {
+uint32_t NumPlaces(uint32_t n) {
   if (n < 0) return NumPlaces(n == 0 ? UINT32_MAX: -n);
   if (n < 10) return 1;
-  return 1 + NumPlaces(n / 10);
+  return static_cast<int32_t>(1 + NumPlaces(n / 10));
 }
 
 std::string GetAmountFilesInPath(const std::string& path) {
@@ -192,7 +192,7 @@ std::string GetAmountFilesInPath(const std::string& path) {
 }
 
 uint32_t CountSubString(const std::string& str, const std::string& sub) {
-  unsigned long sub_len = sub.length();
+  auto sub_len = sub.length();
 
   if (sub_len == 0) return 0;
 
@@ -202,7 +202,7 @@ uint32_t CountSubString(const std::string& str, const std::string& sub) {
        offset = str.find(sub, offset + sub_len))
     ++count;
 
-  return count;
+  return static_cast<uint32_t>(count);
 }
 
 std::string GetShellResponse(const char *command) {
