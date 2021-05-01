@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <string.h>
 #include <tuple>
 #include <algorithm>
 
@@ -133,12 +134,12 @@ void ParseArguments(int argc,
   bool reg_ex_set = false;
 
   for (uint8_t i = 1; i < argc; ++i) {
-    if (argv[i] == "-v" || argv[i] == "--verbose") {
+    if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
       verbose = true;
       continue;
     }
 
-    if (argv[i] == "-V" || argv[i] == "--version") {
+    if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
       print_version = true;
       break;
     }

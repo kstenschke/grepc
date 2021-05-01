@@ -38,8 +38,7 @@ occurrences.
 
 ### -v, --verbose
 
-Print verbosely, that is - print additionally to the grep chart, 
-a results summary:
+Print a results summary additionally to the grep chart:
 
 * amount of total matches
 * amount of matching strings
