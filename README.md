@@ -1,5 +1,8 @@
 # Grep Chart
 
+[![Build Status](https://travis-ci.com/kstenschke/grepc.svg?branch=master)](https://travis-ci.com/kstenschke/grepc)
+
+
 ## Synopsis
 
 ``grepc PATTERN [FILE]``  

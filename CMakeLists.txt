@@ -12,4 +12,4 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_executable(grepc grepc/main.cpp)
+add_executable(grepc grepc/main.cc)
