@@ -242,5 +242,5 @@ std::string RepeatSpaces(uint8_t amount) {
 
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b) {
-  return (std::get<0>(a) > std::get<0>(b));
+  return std::get<0>(a) > std::get<0>(b);
 }
