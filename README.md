@@ -1,6 +1,6 @@
 # Grep Chart
 
-[![Build Status](https://travis-ci.com/kstenschke/grepc.svg?branch=master)](https://travis-ci.com/kstenschke/grepc)
+[![Build Status](https://api.travis-ci.com/kstenschke/grepc.svg?branch=main)](https://travis-ci.com/kstenschke/grepc)
 
 
 ## Synopsis
