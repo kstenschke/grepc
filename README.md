@@ -30,8 +30,8 @@ occurrences.
   * [Find floating numbers sorted by popularity](#find-floating-numbers-and-their-popularity)
 * [Build from source](#build-from-source)
 * [Code Convention](#code-convention)
-* [Author and License](#author-and-license)
 * [Used third party applications](#used-third-party-applications)
+* [Author and License](#author-and-license)
 
 
 ## Options
@@ -93,12 +93,25 @@ There are 2 different matching strings:
 
 ## Build from source
 
-...
+``cmake CMakeLists.txt; make``
 
 
 ## Code Convention
 
-...
+The source code of **grepc** follows the Google C++ Style Guide, 
+see: https://google.github.io/styleguide/cppguide.html  
+
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
+
+## Used third party applications
+
+| Application                                                                                    | License                                                                      |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [GNU Grep](https://www.gnu.org/software/grep/)                                                 | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
+| [wc](https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html#wc-invocation) | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
 
 
 ## Author and License
@@ -114,10 +127,3 @@ notices must be preserved. Contributors provide an express grant of patent
 rights.
 ```
 
-
-## Used third party applications
-
-| Application                                                                                    | License                                                                      |
-| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [GNU Grep](https://www.gnu.org/software/grep/)                                                 | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
-| [wc](https://www.gnu.org/software/coreutils/manual/html_node/wc-invocation.html#wc-invocation) | [GNU General Public License](https://www.gnu.org/licenses/licenses.html#GPL) |
