@@ -5,8 +5,7 @@
 #include <algorithm>
 
 std::string GetAmountFilesInPath(const std::string& path);
-uint32_t GetAmountOccurrencesOfStringInPath(const std::string& path,
-                                            const std::string& str);
+uint32_t CountSubString(const std::string& str, const std::string& sub);
 std::string GetShellResponse(const char *command);
 std::vector<std::string> Split(std::string const &str, char delimiter);
 std::string RepeatSpaces(uint8_t amount);
@@ -17,8 +16,7 @@ int main() {
   std::string reg_ex = "\"[A-Za-z]{3,4}\"";
   std::string path = "/home/kay/CLionProjects/shellDo/*";
 
-  std::string command =
-      "grep -Eo '" + reg_ex + "' " + path + " -r";
+  std::string command = "grep -Eo '" + reg_ex + "' " + path + " -r";
 
   auto strings_in_files = GetShellResponse(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
@@ -58,7 +56,7 @@ int main() {
   std::cout << "\nFound " + std::to_string(lines_of_strings_in_files.size())
       + " matches in " << std::to_string(amount_files)
       << (amount_files_in_path == "1"
-          ? "file"
+          ? "file\n"
           : " out of " + amount_files_in_path + " files.\n");
 
   std::cout << "There are " + std::to_string(amount_strings)
@@ -66,27 +64,13 @@ int main() {
 
   std::vector<std::tuple<uint32_t, std::string>> amount_per_string;
   auto strings = Split(found_strings, '\n');
-  uint16_t i = 0;
 
   for (std::string const& string : strings) {
-    uint32_t amount = GetAmountOccurrencesOfStringInPath(path, string);
+    uint32_t amount = CountSubString(strings_in_files, string);
 
     amount_per_string// NOLINT(performance-inefficient-vector-operation)
         .emplace_back(std::make_tuple(amount, string));
-
-    std::cout << ".";
-
-    ++i;
-
-    if (i == 80) {
-      std::cout << "\n";
-      i = 0;
-    }
-
-    std::cout << std::flush;
   }
-
-  std::cout << "\n\n";
 
   std::sort(amount_per_string.begin(), amount_per_string.end(), SortDesc);
 
@@ -112,14 +96,18 @@ std::string GetAmountFilesInPath(const std::string& path) {
   return amount.substr(0, amount.length() - 1);
 }
 
-uint32_t GetAmountOccurrencesOfStringInPath(const std::string& path,
-                                            const std::string& str) {
-  std::string command =
-      "grep -o '" + str + "' " + path + " -r | wc -l";
+uint32_t CountSubString(const std::string& str, const std::string& sub) {
+  unsigned long sub_len = sub.length();
 
-  auto amount = GetShellResponse(command.c_str());
+  if (sub_len == 0) return 0;
 
-  return std::stoi(amount.substr(0, amount.length() - 1));
+  int count = 0;
+
+  for (size_t offset = str.find(sub); offset != std::string::npos;
+       offset = str.find(sub, offset + sub_len))
+    ++count;
+
+  return count;
 }
 
 std::string GetShellResponse(const char *command) {
