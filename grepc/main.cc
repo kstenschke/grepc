@@ -19,10 +19,10 @@
 
 void ParseArguments(int argc,
                     char *const *argv,
-                    std::string &reg_ex,
-                    std::string &path,
-                    bool &verbose,
-                    bool &print_version);
+                    std::string *reg_ex,
+                    std::string *path,
+                    bool *verbose,
+                    bool *print_version);
 
 void PrintVersion();
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
   std::string path;
   bool verbose = false;
   bool print_version = false;
-  ParseArguments(argc, argv, reg_ex, path, verbose, print_version);
+  ParseArguments(argc, argv, &reg_ex, &path, &verbose, &print_version);
 
   if (print_version) {
     PrintVersion();
@@ -126,28 +126,28 @@ int main(int argc, char **argv) {
 
 void ParseArguments(int argc,
                     char *const *argv,
-                    std::string &reg_ex,
-                    std::string &path,
-                    bool &verbose,
-                    bool &print_version) {
+                    std::string *reg_ex,
+                    std::string *path,
+                    bool *verbose,
+                    bool *print_version) {
   bool reg_ex_set = false;
 
   for (uint8_t i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
-      verbose = true;
+      *verbose = true;
       continue;
     }
 
     if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
-      print_version = true;
+      *print_version = true;
       break;
     }
 
     if (!reg_ex_set) {
-      &reg_ex = argv[i];
+      *reg_ex = argv[i];
       reg_ex_set = true;
     } else {
-      &path = argv[i];
+      *path = argv[i];
     }
   }
 }
