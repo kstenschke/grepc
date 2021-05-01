@@ -21,3 +21,4 @@ script:
   - cmake CMakeLists.txt && make
   - cppcheck --enable=all ./grepc
   - cpplint grepc/* --extensions=cc,h
+  - bash test/functional/run.sh
