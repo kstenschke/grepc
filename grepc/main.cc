@@ -10,10 +10,10 @@
  * Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.
  */
 
+#include <string.h>
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include <string.h>
 #include <tuple>
 #include <algorithm>
 
@@ -96,9 +96,7 @@ int main(int argc, char **argv) {
 
   for (std::string const& string : strings) {
     uint32_t amount = CountSubString(strings_in_files, string);
-
-    amount_per_string// NOLINT(performance-inefficient-vector-operation)
-        .emplace_back(std::make_tuple(amount, string));
+    amount_per_string.emplace_back(std::make_tuple(amount, string));
 
     if (amount > max_occurrences) max_occurrences = amount;
   }
@@ -146,10 +144,10 @@ void ParseArguments(int argc,
     }
 
     if (!reg_ex_set) {
-      reg_ex = argv[i];
+      &reg_ex = argv[i];
       reg_ex_set = true;
     } else {
-      path = argv[i];
+      &path = argv[i];
     }
   }
 }
