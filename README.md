@@ -29,7 +29,7 @@ occurrences.
   * [Find floating numbers sorted by popularity](#find-floating-numbers-and-their-popularity)
   * [Find floating numbers sorted by popularity](#find-floating-numbers-and-their-popularity)
 * [Build from source](#build-from-source)
-* [Code Convention](#code-convention)
+* [Conventions](#conventions)
 * [Used third party applications](#used-third-party-applications)
 * [Author and License](#author-and-license)
 
@@ -96,10 +96,12 @@ There are 2 different matching strings:
 ``cmake CMakeLists.txt; make``
 
 
-## Code Convention
+## Conventions
 
 The source code of **grepc** follows the Google C++ Style Guide, 
-see: https://google.github.io/styleguide/cppguide.html  
+see: https://google.github.io/styleguide/cppguide.html    
+
+**grepc** follows the [Semantic Versioning](https://semver.org) Scheme.
 
 
 ## Changelog
