@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-``grepc PATTERN [FILE]``
+``grepc PATTERN [FILE]``  
 ``grepc -v PATTERN [FILE]``
 
 PATTERN = an extended regular expression (ERE).  
