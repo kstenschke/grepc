@@ -36,7 +36,7 @@ std::string GetCliCommandOutput(const char *command);
 
 std::vector<std::string> Split(std::string const &str, char delimiter);
 
-std::string RepeatSpaces(uint8_t amount);
+std::string RepeatSpaces(uint32_t amount);
 
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b);
@@ -60,17 +60,17 @@ int main(int argc, char **argv) {
 
   if (pattern.empty()) {
     std::cerr << "No pattern given.\n";
-    exit(0);
+    exit(1);
   }
 
   if (path.empty()) {
-    path = argv[0];
-    path = path.substr(0, path.length() - 5) + "*";
+    path += "./*";
   }
 
   std::string command = "grep -Eo '" + pattern + "' " + path + " -r";
 
   auto strings_in_files = GetCliCommandOutput(command.c_str());
+
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
 
   uint32_t amount_files = 0;
@@ -242,10 +242,10 @@ std::vector<std::string> Split(std::string const &str, char delimiter) {
   return result;
 }
 
-std::string RepeatSpaces(uint8_t amount) {
+std::string RepeatSpaces(uint32_t amount) {
   std::string out;
 
-  for (uint8_t i = 0; i < amount; ++i) out += " ";
+  for (uint32_t i = 0; i < amount; ++i) out += " ";
 
   return out;
 }
