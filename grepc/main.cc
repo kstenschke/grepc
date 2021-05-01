@@ -32,7 +32,7 @@ std::string GetAmountFilesInPath(const std::string& path);
 
 uint32_t CountSubString(const std::string& str, const std::string& sub);
 
-std::string GetShellResponse(const char *command);
+std::string GetCliCommandOutput(const char *command);
 
 std::vector<std::string> Split(std::string const &str, char delimiter);
 
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
   std::string command = "grep -Eo '" + reg_ex + "' " + path + " -r";
 
-  auto strings_in_files = GetShellResponse(command.c_str());
+  auto strings_in_files = GetCliCommandOutput(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
 
   uint32_t amount_files = 0;
@@ -186,7 +186,7 @@ uint32_t NumPlaces(uint32_t n) {
 std::string GetAmountFilesInPath(const std::string& path) {
   std::string command = "ls -1q " + path + " | wc -l";
 
-  auto amount = GetShellResponse(command.c_str());
+  auto amount = GetCliCommandOutput(command.c_str());
 
   return amount.substr(0, amount.length() - 1);
 }
@@ -205,7 +205,7 @@ uint32_t CountSubString(const std::string& str, const std::string& sub) {
   return static_cast<uint32_t>(count);
 }
 
-std::string GetShellResponse(const char *command) {
+std::string GetCliCommandOutput(const char *command) {
   FILE *fp;
   char path[1035];
 
