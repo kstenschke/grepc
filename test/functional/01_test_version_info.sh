@@ -6,7 +6,7 @@ output=$("$script_path"/../../bin/linux/grepc -V)
 
 for req_sub_str in 'grepc' '0.0.1' 'License GPLv3+:' 'github.com/kstenschke'; do
   if [ -z "${output##*$req_sub_str*}" ]; then
-    echo "✓ pregc -v output does NOT contain '$req_sub_str'."
+    echo "✓ pregc -v output does contain '$req_sub_str'."
     continue
   else
     echo "pregc -v output does NOT contain '$req_sub_str'."
