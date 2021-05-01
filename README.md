@@ -59,14 +59,11 @@ author(s).
 Find strings that are enclosed in double quotes, with a minimum length of ten
 characters:
 
-``grepc -v '"[A-Za-z ]{10,}"' ./src/*``  
+``grepc '"[A-Za-z ]{10,}"' ./src/*``  
 
 **Output e.g.:**
 
 ```
-Found 1071 matches in 83 out of 195 files.
-There are 7 different matching strings:
-
 "White Christmas"  - 156 occurrences.
 "Candle in the Wind"   - 155 occurrences.
 "In the Summertime"  - 154 occurrences.
