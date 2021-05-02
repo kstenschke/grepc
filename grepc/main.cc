@@ -146,10 +146,10 @@ void ParseArguments(int argc,
 
   if (argv[1][0] == '-') {
     if (strcmp(argv[1], "-v") != 0
-        && strcmp(argv[0], "--verbose") != 0
-        && strcmp(argv[0], "-V") != 0
-        && strcmp(argv[0], "--version") != 0) {
-      std::cerr << "Unknown option: " << argv[0] << "\n";
+        && strcmp(argv[1], "--verbose") != 0
+        && strcmp(argv[1], "-V") != 0
+        && strcmp(argv[1], "--version") != 0) {
+      std::cerr << "Unknown option: " << argv[1] << "\n";
       exit(1);
     }
   }

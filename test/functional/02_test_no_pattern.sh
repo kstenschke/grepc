@@ -1,13 +1,12 @@
 #!/bin/bash
 
-script_path=$(dirname $0)
-
-output=$("$script_path"/../../bin/linux/grepc) >/dev/null 2>&1
+output=$(grepc 2>&1)
 
 if [ -z "${output##*No pattern given.*}" ]; then
-  echo "✓ pregc w/o any argument prints 'No pattern given.'."
+  echo "-- pregc w/o any argument => Prints 'No pattern given' ✓"
 else
-  echo "pregc -v output does NOT print 'No pattern given.'."
+  echo "xx pregc -v => Does NOT print 'No pattern given.' :("
+  echo "   output is: $output"
   exit 1
 fi
 

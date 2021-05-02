@@ -18,7 +18,7 @@ before_install:
   - sudo pip install cpplint
 
 script:
-  - cmake CMakeLists.txt && make
+  - cmake CMakeLists.txt && make && make install
   - cppcheck --enable=all ./grepc
   - cpplint grepc/* --extensions=cc,h
   - bash test/functional/run.sh
