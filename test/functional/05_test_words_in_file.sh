@@ -2,9 +2,9 @@
 
 full_path=$(realpath "$0")
 dir_path=$(dirname "$full_path")
-output=$(grepc '[A-Za-z]{5,}' "$dir_path"/../data/lorem_ipsum.txt 2>&1)
+output=$(grepc '[A-Za-z]{4,}' "$dir_path"/../data/give_it_away.txt 2>&1)
 
-for req_sub_str in '2 dolor' '2 dolore' '1 occaecat'; do
+for req_sub_str in '37 away' '25 Give' '18 give' '12 What' '8  your'; do
   if [[ "$output" == *"$req_sub_str"* ]]; then
     echo "-- pregc for words in file => Does contain '$req_sub_str' ✓"
     continue

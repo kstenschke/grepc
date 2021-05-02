@@ -25,7 +25,7 @@ void ParseArguments(int argc,
                     bool *verbose,
                     bool *print_version);
 
-void PrintVersion();
+void PrintVersionAndExit();
 
 uint32_t NumPlaces(uint32_t n);
 
@@ -48,6 +48,10 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
 
 bool IsDir(const std::string& path);
 
+void EnsureRecursionIfPathIsDirectory(std::string &path, bool &path_is_dir);
+
+std::string getSortableStringFromMatchesTuple(const std::tuple<uint32_t,
+                                                               std::string> &a);
 int main(int argc, char **argv) {
   std::string pattern;
   std::string path;
@@ -57,10 +61,7 @@ int main(int argc, char **argv) {
   if (argc > 1)
     ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
 
-  if (print_version) {
-    PrintVersion();
-    exit(0);
-  }
+  if (print_version) PrintVersionAndExit();
 
   if (pattern.empty()) {
     std::cerr << "No pattern given.\n";
@@ -68,27 +69,11 @@ int main(int argc, char **argv) {
   }
 
   bool path_is_dir = false;
-
-  if (path.empty()) {
-    // "grep <PATH>" = almost same as grep <PATH> -r,
-    // but output is <MATCH>\n<MATCH>\n...
-    // instead of <FILE>:<MATCH>\n<FILE>:<MATCH>\n...
-    path = ".";
-    path_is_dir = true;
-  } else {
-    if (IsDir(path)) {
-      if (path[path.length() - 1] != '*') {
-        path += path[path.length() - 1] == '/' ? "*" : "/*";
-      }
-      path_is_dir = true;
-    }
-  }
+  EnsureRecursionIfPathIsDirectory(path, path_is_dir);
 
   std::string command = "grep -Eo '" + pattern + "' " + path;
-
   auto strings_in_files = GetCliCommandOutput(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
-
   uint32_t amount_strings = 0;
   std::string found_strings;
 
@@ -142,6 +127,22 @@ int main(int argc, char **argv) {
   return 0;
 }
 
+void EnsureRecursionIfPathIsDirectory(std::string &path, bool &path_is_dir) {
+  if (path.empty()) {
+    path = ".";
+    path_is_dir = true;
+
+    return;
+  }
+
+  if (IsDir(path)) {
+    if (path[path.length() - 1] != '*') {
+      path += path[path.length() - 1] == '/' ? "*" : "/*";
+    }
+    path_is_dir = true;
+  }
+}
+
 void ParseArguments(int argc,
                     char *const *argv,
                     std::string *reg_ex,
@@ -180,7 +181,7 @@ void ParseArguments(int argc,
   }
 }
 
-void PrintVersion() {
+void PrintVersionAndExit() {
   std::cout <<
   "grepc 0.0.1\n"
   "License GPLv3+: GNU GPL version 3 or later "
@@ -189,13 +190,15 @@ void PrintVersion() {
   "There is NO WARRANTY, to the extent permitted by law.\n"
   "\n"
   "Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.\n";
+
+  exit(0);
 }
 
 void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
                   const std::string &amount_files_in_path,
                   uint32_t amount_strings) {
   std::cout << "\nFound " + std::to_string(lines_of_strings_in_files.size())
-      + " matches in " << amount_files_in_path << "\n";
+      + " matches in " << amount_files_in_path << " files.\n";
   std::cout << "There are " + std::to_string(amount_strings)
       + " different matching strings:\n" << std::endl;
 }
@@ -265,7 +268,22 @@ std::string RepeatSpaces(uint32_t amount) {
 
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b) {
-  return std::get<0>(a) > std::get<0>(b);
+  return getSortableStringFromMatchesTuple(a) <
+    getSortableStringFromMatchesTuple(b);
+}
+
+std::string getSortableStringFromMatchesTuple(const std::tuple<uint32_t,
+                                              std::string> &a) {
+  auto amount = std::get<0>(a);
+  amount = 10000 - amount;
+  auto amount_desc = std::to_string(amount);
+
+  while (amount_desc.length() < 5)
+    amount_desc = std::string("0").append(amount_desc);
+
+  const auto &string_asc = std::get<1>(a);
+
+  return amount_desc + "-" + string_asc;
 }
 
 // TODO(kay): replace w/ std::filesystem::is_directory() when switching to c++17

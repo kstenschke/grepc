@@ -7,3 +7,4 @@ script_path=$(dirname $0)
 "$script_path"/03_test_unknown_option.sh
 "$script_path"/04_test_words_in_path.sh
 "$script_path"/05_test_words_in_file.sh
+"$script_path"/06_test_words_in_path_verbose.sh
