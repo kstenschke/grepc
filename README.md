@@ -17,10 +17,8 @@ FILE = a relative or absolute path to a file or directory.
 **grepc** searches for PATTERN in each FILE. If no FILE is given, recursively 
 searches the working directory.  
 **grepc** prints all matches and their amount of occurrences.  
-
-The chart of found matches is sorted:
-1. descending by amount of occurrences 
-2. ascending alphabetically by matching string
+Printed matches are sorted: 1. descending by amount of occurrences, 2. ascending
+alphabetically by matching string.
 
 
 ## Table of Contents
