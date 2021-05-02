@@ -43,7 +43,6 @@ bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b);
 
 void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
-                  uint32_t amount_files,
                   const std::string &amount_files_in_path,
                   uint32_t amount_strings);
 
@@ -68,56 +67,30 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  bool path_is_dir;
-
   if (path.empty()) {
+    // "grep <PATH>/*" = almost same as grep <DIR> -r,
+    // but output is <MATCH>\n<MATCH>\n...
+    // instead of <FILE>:<MATCH>\n<FILE>:<MATCH>\n...
     path = "./*";
-    path_is_dir = true;
   } else {
-    path_is_dir = path[path.length() - 1] == '*' || IsDir(path);
+    if (path[path.length() - 1] != '*'
+       && IsDir(path)
+    ) {
+      path += path[path.length() - 1] == '/' ? "*" : "/*";
+    }
   }
 
-  std::string command = "grep -Eo '" + pattern + "' " + path
-      + (path_is_dir ? " -r" : "");
+  std::string command = "grep -Eo '" + pattern + "' " + path;
 
   auto strings_in_files = GetCliCommandOutput(command.c_str());
-
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
-
-  uint32_t amount_files = 0;
-  std::string file_paths;
 
   uint32_t amount_strings = 0;
   std::string found_strings;
-  uint32_t max_occurrences = 0;
 
   for (auto const &line : lines_of_strings_in_files) {
-    // grep over multiple files w/o trailing "/*" but "-r" lists matches as:
-    // "filename:matching string"
-
-    // grep over single file lists matches as: "matching string"
-    std::string path_file;
-    std::string found_string;
-
-    if (path_is_dir) {
-      auto offset_colon = line.find(':');
-
-      if (offset_colon == std::string::npos) continue;
-
-      path_file = line.substr(0, offset_colon);
-      found_string = line.substr(offset_colon + 1);
-    } else {
-      path_file = path;
-      found_string = line;
-    }
-
-    if (verbose && file_paths.find(path_file) == std::string::npos) {
-      file_paths += path_file + "\n";
-      ++amount_files;
-    }
-
-    if (found_strings.find(found_string) == std::string::npos) {
-      found_strings += found_string + "\n";
+    if (found_strings.find(line) == std::string::npos) {
+      found_strings += line + "\n";
       ++amount_strings;
     }
   }
@@ -126,6 +99,7 @@ int main(int argc, char **argv) {
 
   std::vector<std::tuple<uint32_t, std::string>> amount_per_string;
   auto strings = Split(found_strings, '\n');
+  uint32_t max_occurrences = 0;
 
   for (std::string const& string : strings) {
     uint32_t amount = CountSubString(strings_in_files, string);
@@ -138,7 +112,6 @@ int main(int argc, char **argv) {
 
   if (verbose)
     PrintSummary(lines_of_strings_in_files,
-        amount_files,
         amount_files_in_path,
         amount_strings);
 
@@ -207,15 +180,10 @@ void PrintVersion() {
 }
 
 void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
-                  uint32_t amount_files,
                   const std::string &amount_files_in_path,
                   uint32_t amount_strings) {
   std::cout << "\nFound " + std::to_string(lines_of_strings_in_files.size())
-      + " matches in " << std::to_string(amount_files)
-          << (amount_files_in_path == "1"
-                ? "file\n"
-                : " out of " + amount_files_in_path + " files.\n");
-
+      + " matches in " << amount_files_in_path << "\n";
   std::cout << "There are " + std::to_string(amount_strings)
       + " different matching strings:\n" << std::endl;
 }
