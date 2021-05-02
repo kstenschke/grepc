@@ -268,7 +268,7 @@ bool SortDesc(const std::tuple<uint32_t, std::string>& a,
   return std::get<0>(a) > std::get<0>(b);
 }
 
-// TODO replace w/ std::filesystem::is_directory() when switching to c++17
+// TODO(kay): replace w/ std::filesystem::is_directory() when switching to c++17
 bool IsDir(const std::string& path) {
   struct stat buffer;
 
