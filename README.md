@@ -62,7 +62,7 @@ author(s).
 Find strings that are enclosed in double quotes, with a minimum length of ten
 characters:
 
-``grepc '"[A-Za-z ]{10,}"' ./src/*``  
+``grepc '"[A-Za-z ]{10,}"' ./src``  
 
 **Output e.g.:**
 
@@ -81,7 +81,7 @@ characters:
 
 Find floating numbers that have at least 14 decimal places.
 
-``grepc -v '(\d\.\d+){16,}' ./src/*``
+``grepc -v '(\d\.\d+){16,}' ./src``
 
 **Output e.g.:**
 
