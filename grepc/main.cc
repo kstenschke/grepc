@@ -10,6 +10,7 @@
  * Written by Kay Stenschke, see <https://github.com/kstenschke/grepc>.
  */
 
+#include <sys/stat.h>
 #include <algorithm>
 #include <cstring>
 #include <iostream>
@@ -46,6 +47,8 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
                   const std::string &amount_files_in_path,
                   uint32_t amount_strings);
 
+bool IsDir(const std::string& path);
+
 int main(int argc, char **argv) {
   std::string pattern;
   std::string path;
@@ -65,11 +68,17 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  bool path_is_dir;
+
   if (path.empty()) {
-    path += "./*";
+    path = "./*";
+    path_is_dir = true;
+  } else {
+    path_is_dir = path[path.length() - 1] == '*' || IsDir(path);
   }
 
-  std::string command = "grep -Eo '" + pattern + "' " + path + " -r";
+  std::string command = "grep -Eo '" + pattern + "' " + path
+      + (path_is_dir ? " -r" : "");
 
   auto strings_in_files = GetCliCommandOutput(command.c_str());
 
@@ -83,12 +92,24 @@ int main(int argc, char **argv) {
   uint32_t max_occurrences = 0;
 
   for (auto const &line : lines_of_strings_in_files) {
-    auto offset_colon = line.find(':');
+    // grep over multiple files w/o trailing "/*" but "-r" lists matches as:
+    // "filename:matching string"
 
-    if (offset_colon == std::string::npos) continue;
+    // grep over single file lists matches as: "matching string"
+    std::string path_file;
+    std::string found_string;
 
-    std::string path_file = line.substr(0, offset_colon);
-    std::string found_string = line.substr(offset_colon + 1);
+    if (path_is_dir) {
+      auto offset_colon = line.find(':');
+
+      if (offset_colon == std::string::npos) continue;
+
+      path_file = line.substr(0, offset_colon);
+      found_string = line.substr(offset_colon + 1);
+    } else {
+      path_file = path;
+      found_string = line;
+    }
 
     if (verbose && file_paths.find(path_file) == std::string::npos) {
       file_paths += path_file + "\n";
@@ -265,4 +286,13 @@ std::string RepeatSpaces(uint32_t amount) {
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b) {
   return std::get<0>(a) > std::get<0>(b);
+}
+
+// TODO replace w/ std::filesystem::is_directory() when switching to c++17
+bool IsDir(const std::string& path) {
+  struct stat buffer;
+
+  stat(path.c_str(), &buffer);
+
+  return S_ISDIR(buffer.st_mode);
 }
