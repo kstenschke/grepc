@@ -72,6 +72,9 @@ int main(int argc, char **argv) {
   EnsureRecursionIfPathIsDirectory(&path, &path_is_dir);
 
   std::string command = "grep -Eo '" + pattern + "' " + path;
+
+  if (path_is_dir) command += " -r";
+
   auto strings_in_files = GetCliCommandOutput(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
   uint32_t amount_strings = 0;
@@ -85,6 +88,8 @@ int main(int argc, char **argv) {
       if (offset_colon != std::string::npos)
         found_string = line.substr(offset_colon + 1);
     }
+
+    if (found_string.find("Binary file ") == 0) continue;
 
     if (found_strings.find(found_string + "\n") == std::string::npos) {
       found_strings += found_string + "\n";
@@ -129,7 +134,7 @@ int main(int argc, char **argv) {
 
 void EnsureRecursionIfPathIsDirectory(std::string *path, bool *path_is_dir) {
   if ((*path).empty()) {
-    *path = ".";
+    *path = "./*";
     *path_is_dir = true;
 
     return;
