@@ -4,7 +4,7 @@ full_path=$(realpath "$0")
 dir_path=$(dirname "$full_path")
 output=$(grepc '[A-Za-z]{5,}' "$dir_path"/../data 2>&1)
 
-for req_sub_str in '4 dolor' '2 dolore' '1 irure'; do
+for req_sub_str in '2 dolor' '2 dolore' '2 Alice' '1 irure'; do
   if [[ "$output" == *"$req_sub_str"* ]]; then
     echo "-- pregc for words in path => Does contain '$req_sub_str' ✓"
     continue

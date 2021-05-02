@@ -67,16 +67,20 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  bool path_is_dir = false;
+
   if (path.empty()) {
-    // "grep <PATH>/*" = almost same as grep <DIR> -r,
+    // "grep <PATH>" = almost same as grep <PATH> -r,
     // but output is <MATCH>\n<MATCH>\n...
     // instead of <FILE>:<MATCH>\n<FILE>:<MATCH>\n...
-    path = "./*";
+    path = ".";
+    path_is_dir = true;
   } else {
-    if (path[path.length() - 1] != '*'
-       && IsDir(path)
-    ) {
-      path += path[path.length() - 1] == '/' ? "*" : "/*";
+    if (IsDir(path)) {
+      if (path[path.length() - 1] != '*') {
+        path += path[path.length() - 1] == '/' ? "*" : "/*";
+      }
+      path_is_dir = true;
     }
   }
 
@@ -89,8 +93,16 @@ int main(int argc, char **argv) {
   std::string found_strings;
 
   for (auto const &line : lines_of_strings_in_files) {
-    if (found_strings.find(line) == std::string::npos) {
-      found_strings += line + "\n";
+    std::string found_string = line;
+
+    if (path_is_dir) {
+      auto offset_colon = line.find(':');
+      if (offset_colon != std::string::npos)
+        found_string = line.substr(offset_colon + 1);
+    }
+
+    if (found_strings.find(found_string + "\n") == std::string::npos) {
+      found_strings += found_string + "\n";
       ++amount_strings;
     }
   }
@@ -102,7 +114,7 @@ int main(int argc, char **argv) {
   uint32_t max_occurrences = 0;
 
   for (std::string const& string : strings) {
-    uint32_t amount = CountSubString(strings_in_files, string);
+    uint32_t amount = CountSubString(strings_in_files, string + "\n");
     amount_per_string.emplace_back(std::make_tuple(amount, string));
 
     if (amount > max_occurrences) max_occurrences = amount;
