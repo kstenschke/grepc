@@ -48,7 +48,7 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
 
 bool IsDir(const std::string& path);
 
-void EnsureRecursionIfPathIsDirectory(std::string &path, bool &path_is_dir);
+void EnsureRecursionIfPathIsDirectory(std::string *path, bool *path_is_dir);
 
 std::string getSortableStringFromMatchesTuple(const std::tuple<uint32_t,
                                                                std::string> &a);
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
   }
 
   bool path_is_dir = false;
-  EnsureRecursionIfPathIsDirectory(path, path_is_dir);
+  EnsureRecursionIfPathIsDirectory(&path, &path_is_dir);
 
   std::string command = "grep -Eo '" + pattern + "' " + path;
   auto strings_in_files = GetCliCommandOutput(command.c_str());
@@ -127,19 +127,21 @@ int main(int argc, char **argv) {
   return 0;
 }
 
-void EnsureRecursionIfPathIsDirectory(std::string &path, bool &path_is_dir) {
-  if (path.empty()) {
-    path = ".";
-    path_is_dir = true;
+void EnsureRecursionIfPathIsDirectory(std::string *path, bool *path_is_dir) {
+  if ((*path).empty()) {
+    *path = ".";
+    *path_is_dir = true;
 
     return;
   }
 
-  if (IsDir(path)) {
-    if (path[path.length() - 1] != '*') {
-      path += path[path.length() - 1] == '/' ? "*" : "/*";
-    }
-    path_is_dir = true;
+  if (IsDir(*path)) {
+    auto path_len = (*path).length();
+
+    if ((*path)[path_len - 1] != '*')
+      *path += (*path)[path_len - 1] == '/' ? "*" : "/*";
+
+    *path_is_dir = true;
   }
 }
 
