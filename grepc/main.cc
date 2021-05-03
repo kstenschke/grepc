@@ -179,7 +179,6 @@ void ParseArguments(int argc,
   }
 
   for (uint64_t i = 1; i < argc; ++i) {
-
     if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
       *verbose = true;
       continue;
