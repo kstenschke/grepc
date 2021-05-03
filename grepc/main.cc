@@ -233,9 +233,14 @@ void PrintSummary(const std::vector<std::string> &lines_of_strings_in_files,
 }
 
 uint32_t NumPlaces(uint32_t n) {
-  if (n < 0) return NumPlaces(n == 0 ? UINT32_MAX: -n);
-  if (n < 10) return 1;
-  return static_cast<int32_t>(1 + NumPlaces(n / 10));
+  int count = 0;
+
+  while (n != 0) {
+    n /= 10;
+    ++count;
+  }
+
+  return count;
 }
 
 std::string GetAmountFilesInPath(const std::string& path) {
