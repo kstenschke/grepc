@@ -44,7 +44,7 @@ alphabetically by matching string.
 
 ## Options
 
-### -m=, --m=
+### -m=, --min=
 
 Minimum amount of occurrences. Matching string with less occurrences than the
 given amount are not printed.
