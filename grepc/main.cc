@@ -103,7 +103,8 @@ int main(int argc, char **argv) {
   uint32_t max_occurrences = 0;
 
   for (std::string const& string : strings) {
-    uint32_t amount_occurrences = CountSubString(strings_in_files, string + "\n");
+    uint32_t amount_occurrences =
+        CountSubString(strings_in_files, string + "\n");
 
     if (amount_occurrences > min_occurrences) {
       amount_per_string.emplace_back(std::make_tuple(amount_occurrences,
