@@ -212,7 +212,7 @@ void ParseArguments(int argc,
 
 void PrintVersionAndExit() {
   std::cout <<
-  "grepc 0.0.1\n"
+  "grepc 0.0.2\n"
   "License GPLv3+: GNU GPL version 3 or later "
   "<http://gnu.org/licenses/gpl.html>.\n"
   "This is free software: you are free to change and redistribute it.\n"
