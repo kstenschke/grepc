@@ -7,6 +7,7 @@
 
 ``grepc PATTERN [FILE]``  
 ``grepc -v PATTERN [FILE]``
+``grepc -m=<MIN_OCCURRENCES> PATTERN [FILE]``
 
 PATTERN = an extended regular expression (ERE).  
 FILE = a relative or absolute path to a file or directory.
@@ -27,6 +28,7 @@ alphabetically by matching string.
 * [Description](#description)
 * [Table of Contents](#table-of-contents)
 * [Options](#options)
+  * [-m, --min](#-m---min)
   * [-v, --verbose](#-v---verbose)
   * [-V, --version](#-v---version)
 * [Usage examples](#usage-examples)
@@ -40,6 +42,12 @@ alphabetically by matching string.
 
 
 ## Options
+
+### -m=, --m=
+
+Minimum amount of occurrences. Matching string with less occurrences than the
+given amount are not printed.
+
 
 ### -v, --verbose
 
@@ -76,6 +84,9 @@ characters:
 151 "Its now or never"
 150 "We are the world"
 ```
+
+**Note:** to find strings that are enclosed in single quotes, these must be
+escaped as: ``'\''``. E.g.: ``grepc "'\''[A-Za-z]{4,}'\''"`` 
 
 
 ### Find floating numbers sorted by popularity  

@@ -23,6 +23,7 @@ void ParseArguments(int argc,
                     std::string *reg_ex,
                     std::string *path,
                     bool *verbose,
+                    uint32_t *min_occurrences,
                     bool *print_version);
 
 void PrintVersionAndExit();
@@ -50,16 +51,16 @@ bool IsDir(const std::string& path);
 
 void EnsureRecursionIfPathIsDirectory(std::string *path, bool *path_is_dir);
 
-std::string getSortableStringFromMatchesTuple(const std::tuple<uint32_t,
-                                                               std::string> &a);
 int main(int argc, char **argv) {
   std::string pattern;
   std::string path;
   bool verbose = false;
   bool print_version = false;
+  uint32_t min_occurrences = 0;
 
   if (argc > 1)
-    ParseArguments(argc, argv, &pattern, &path, &verbose, &print_version);
+    ParseArguments(argc, argv, &pattern, &path, &verbose, &min_occurrences,
+                   &print_version);
 
   if (print_version) PrintVersionAndExit();
 
@@ -77,7 +78,6 @@ int main(int argc, char **argv) {
 
   auto strings_in_files = GetCliCommandOutput(command.c_str());
   auto lines_of_strings_in_files = Split(strings_in_files, '\n');
-  uint32_t amount_strings = 0;
   std::string found_strings;
 
   for (auto const &line : lines_of_strings_in_files) {
@@ -89,11 +89,10 @@ int main(int argc, char **argv) {
         found_string = line.substr(offset_colon + 1);
     }
 
-    if (found_string.find("Binary file ") == 0) continue;
+    if (found_string.rfind("Binary file ", 0) == 0) continue;
 
     if (found_strings.find(found_string + "\n") == std::string::npos) {
       found_strings += found_string + "\n";
-      ++amount_strings;
     }
   }
 
@@ -104,10 +103,15 @@ int main(int argc, char **argv) {
   uint32_t max_occurrences = 0;
 
   for (std::string const& string : strings) {
-    uint32_t amount = CountSubString(strings_in_files, string + "\n");
-    amount_per_string.emplace_back(std::make_tuple(amount, string));
+    uint32_t amount_occurrences = CountSubString(strings_in_files, string + "\n");
 
-    if (amount > max_occurrences) max_occurrences = amount;
+    if (amount_occurrences > min_occurrences) {
+      amount_per_string.emplace_back(std::make_tuple(amount_occurrences,
+                                                     string));
+
+      if (amount_occurrences > max_occurrences)
+        max_occurrences = amount_occurrences;
+    }
   }
 
   std::sort(amount_per_string.begin(), amount_per_string.end(), SortDesc);
@@ -115,7 +119,7 @@ int main(int argc, char **argv) {
   if (verbose)
     PrintSummary(lines_of_strings_in_files,
         amount_files_in_path,
-        amount_strings);
+        amount_per_string.size());
 
   uint32_t max_places = NumPlaces(max_occurrences);
 
@@ -155,20 +159,26 @@ void ParseArguments(int argc,
                     std::string *reg_ex,
                     std::string *path,
                     bool *verbose,
+                    uint32_t *min_occurrences,
                     bool *print_version) {
   bool reg_ex_set = false;
+
+  std::string arg_str = argv[1];
 
   if (argv[1][0] == '-') {
     if (strcmp(argv[1], "-v") != 0
         && strcmp(argv[1], "--verbose") != 0
         && strcmp(argv[1], "-V") != 0
-        && strcmp(argv[1], "--version") != 0) {
+        && strcmp(argv[1], "--version") != 0
+        && arg_str.rfind("-m=", 0) != 0
+        && arg_str.rfind("--min=", 0) != 0) {
       std::cerr << "Unknown option: " << argv[1] << "\n";
       exit(1);
     }
   }
 
   for (uint64_t i = 1; i < argc; ++i) {
+
     if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
       *verbose = true;
       continue;
@@ -177,6 +187,18 @@ void ParseArguments(int argc,
     if (strcmp(argv[i], "-V") == 0 || strcmp(argv[i], "--version") == 0) {
       *print_version = true;
       break;
+    }
+
+    arg_str = argv[i];
+
+    if (arg_str.rfind("-m=", 0) == 0) {
+      *min_occurrences = std::stoi(arg_str.substr(3));
+      continue;
+    }
+
+    if (arg_str.rfind("--min=", 0) == 0) {
+      *min_occurrences = std::stoi(arg_str.substr(6));
+      continue;
     }
 
     if (!reg_ex_set) {
@@ -275,22 +297,12 @@ std::string RepeatSpaces(uint32_t amount) {
 
 bool SortDesc(const std::tuple<uint32_t, std::string>& a,
               const std::tuple<uint32_t, std::string>& b) {
-  return getSortableStringFromMatchesTuple(a) <
-    getSortableStringFromMatchesTuple(b);
-}
+  auto amount_a = std::get<0>(a);
+  auto amount_b = std::get<0>(b);
 
-std::string getSortableStringFromMatchesTuple(const std::tuple<uint32_t,
-                                              std::string> &a) {
-  auto amount = std::get<0>(a);
-  amount = 10000 - amount;
-  auto amount_desc = std::to_string(amount);
-
-  while (amount_desc.length() < 5)
-    amount_desc = std::string("0").append(amount_desc);
-
-  const auto &string_asc = std::get<1>(a);
-
-  return amount_desc + "-" + string_asc;
+  return amount_a != amount_b
+    ? amount_a > amount_b  // amount descending
+    : std::get<1>(a) < std::get<1>(b);  // string ascending
 }
 
 // TODO(kay): replace w/ std::filesystem::is_directory() when switching to c++17
