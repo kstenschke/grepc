@@ -1,6 +1,7 @@
 # Grep Chart
 
 [![Build Status](https://api.travis-ci.com/kstenschke/grepc.svg?branch=main)](https://travis-ci.com/kstenschke/grepc)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/kstenschke/grepc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kstenschke/grepc/context:cpp)
 
 
 ## Synopsis
