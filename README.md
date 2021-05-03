@@ -87,7 +87,8 @@ characters:
 ```
 
 **Note:** to find strings that are enclosed in single quotes, these must be
-escaped as: ``'\''``. E.g.: ``grepc "'\''[A-Za-z]{4,}'\''"`` 
+escaped as: ``'\''``.  
+E.g.: ``grepc "'\''[A-Za-z]{4,}'\''"`` 
 
 
 ### Find floating numbers sorted by popularity  
